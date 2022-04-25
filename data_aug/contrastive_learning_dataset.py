@@ -28,11 +28,10 @@ class ContrastiveLearningDataset:
                                                                   self.get_simclr_pipeline_transform(32),
                                                                   n_views),
                                                               download=True),
-                          'custom': lambda: datasets.CustomDataSet(self.root_folder, train=True,
+                          'custom': lambda: datasets.CustomDataSet(self.root_folder,
                                                               transform=ContrastiveLearningViewGenerator(
                                                                   self.get_simclr_pipeline_transform(32),
-                                                                  n_views),
-                                                              download=True),
+                                                                  n_views)),
 
                           'stl10': lambda: datasets.STL10(self.root_folder, split='unlabeled',
                                                           transform=ContrastiveLearningViewGenerator(
