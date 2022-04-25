@@ -3,6 +3,7 @@ from data_aug.gaussian_blur import GaussianBlur
 from torchvision import transforms, datasets
 from data_aug.view_generator import ContrastiveLearningViewGenerator
 from exceptions.exceptions import InvalidDatasetSelection
+from utils import CustomDataSet
 
 
 class ContrastiveLearningDataset:
@@ -23,6 +24,11 @@ class ContrastiveLearningDataset:
 
     def get_dataset(self, name, n_views):
         valid_datasets = {'cifar10': lambda: datasets.CIFAR10(self.root_folder, train=True,
+                                                              transform=ContrastiveLearningViewGenerator(
+                                                                  self.get_simclr_pipeline_transform(32),
+                                                                  n_views),
+                                                              download=True),
+                          'custom': lambda: datasets.CustomDataSet(self.root_folder, train=True,
                                                               transform=ContrastiveLearningViewGenerator(
                                                                   self.get_simclr_pipeline_transform(32),
                                                                   n_views),
