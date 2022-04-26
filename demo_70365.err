@@ -1,14 +1,0 @@
-ERROR: Invalid requirement: '_libgcc_mutex=0.1=main' (from line 4 of requirements.txt)
-Hint: = is not a valid operator. Did you mean == ?
-  0%|          | 0/4000 [00:00<?, ?it/s]  0%|          | 0/4000 [00:04<?, ?it/s]
-Traceback (most recent call last):
-  File "/scratch/ask9126/DL_Project22/SimCLR/run.py", line 89, in <module>
-    main()
-  File "/scratch/ask9126/DL_Project22/SimCLR/run.py", line 85, in main
-    simclr.train(train_loader)
-  File "/scratch/ask9126/DL_Project22/SimCLR/simclr.py", line 70, in train
-    images = torch.cat(images, dim=0)
-TypeError: cat() received an invalid combination of arguments - got (Tensor, dim=int), but expected one of:
- * (tuple of Tensors tensors, int dim, *, Tensor out)
- * (tuple of Tensors tensors, name dim, *, Tensor out)
-

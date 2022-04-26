@@ -67,13 +67,13 @@ class SimCLR(object):
 
         for epoch_counter in range(self.args.epochs):
             for images, _ in tqdm(train_loader):
-                print(images)
-                try:
-                    print("Use parentheses")
-                    print(images.shape())
-                except:
-                    print("Do not use parantheses")
-                    print(images.shape)
+                #print(images)
+                #try:
+                    #print("Use parentheses")
+                    #print(images.shape())
+                #except:
+                    #print("Do not use parantheses")
+                    #print(images.shape)
                 images = torch.cat(images, dim=0)
 
                 images = images.to(self.args.device)
@@ -98,6 +98,24 @@ class SimCLR(object):
                     self.writer.add_scalar('learning_rate', self.scheduler.get_lr()[0], global_step=n_iter)
 
                 n_iter += 1
+
+                # save model checkpoints
+                checkpoint_name = 'checkpoint_{:04d}.pth.tar'.format(self.args.epochs)
+                save_checkpoint({
+                    'epoch': self.args.epochs,
+                    'arch': self.args.arch,
+                    'state_dict': self.model.state_dict(),
+                    'optimizer': self.optimizer.state_dict(),
+                }, is_best=False, filename=os.path.join(self.writer.log_dir, checkpoint_name))
+                logging.info(f"Model checkpoint and metadata has been saved at {self.writer.log_dir}.")
+
+                checkpoint_name = 'backbone_{:04d}.pth.tar'.format(self.args.epochs)
+                save_checkpoint({
+                    'epoch': self.args.epochs,
+                    'arch': self.args.arch,
+                    'state_dict': self.model.backbone.state_dict()
+                }, is_best=False, filename=os.path.join(self.writer.log_dir, checkpoint_name))
+                logging.info(f"Model checkpoint and metadata has been saved at {self.writer.log_dir}.")
 
             # warmup for the first 10 epochs
             if epoch_counter >= 10:
