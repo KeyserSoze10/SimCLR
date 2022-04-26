@@ -99,28 +99,28 @@ class SimCLR(object):
 
                 n_iter += 1
 
-                # save model checkpoints
-                checkpoint_name = 'checkpoint_{:04d}.pth.tar'.format(self.args.epochs)
-                save_checkpoint({
-                    'epoch': self.args.epochs,
-                    'arch': self.args.arch,
-                    'state_dict': self.model.state_dict(),
-                    'optimizer': self.optimizer.state_dict(),
-                }, is_best=False, filename=os.path.join(self.writer.log_dir, checkpoint_name))
-                logging.info(f"Model checkpoint and metadata has been saved at {self.writer.log_dir}.")
-
-                checkpoint_name = 'backbone_{:04d}.pth.tar'.format(self.args.epochs)
-                save_checkpoint({
-                    'epoch': self.args.epochs,
-                    'arch': self.args.arch,
-                    'state_dict': self.model.backbone.state_dict()
-                }, is_best=False, filename=os.path.join(self.writer.log_dir, checkpoint_name))
-                logging.info(f"Model checkpoint and metadata has been saved at {self.writer.log_dir}.")
-
             # warmup for the first 10 epochs
             if epoch_counter >= 10:
                 self.scheduler.step()
             logging.debug(f"Epoch: {epoch_counter}\tLoss: {loss}\tTop1 accuracy: {top1[0]}")
+
+            # save model checkpoints
+            checkpoint_name = 'checkpoint_{:04d}.pth.tar'.format(self.args.epochs)
+            save_checkpoint({
+                'epoch': self.args.epochs,
+                'arch': self.args.arch,
+                'state_dict': self.model.state_dict(),
+                'optimizer': self.optimizer.state_dict(),
+            }, is_best=False, filename=os.path.join(self.writer.log_dir, checkpoint_name))
+            logging.info(f"Model checkpoint and metadata has been saved at {self.writer.log_dir}.")
+
+            checkpoint_name = 'backbone_{:04d}.pth.tar'.format(self.args.epochs)
+            save_checkpoint({
+                'epoch': self.args.epochs,
+                'arch': self.args.arch,
+                'state_dict': self.model.backbone.state_dict()
+            }, is_best=False, filename=os.path.join(self.writer.log_dir, checkpoint_name))
+            logging.info(f"Model checkpoint and metadata has been saved at {self.writer.log_dir}.")
 
         logging.info("Training has finished.")
         # save model checkpoints
