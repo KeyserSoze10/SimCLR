@@ -38,5 +38,5 @@ singularity exec --nv \
 source /ext3/env.sh
 conda activate
 pip install -r requirements.txt
-python run.py -data /unlabeled -dataset-name custom --arch resnet50 --batch-size 128 --log-every-n-steps 100 --epochs 100 --out_dim 2048 --learning-rate 0.001 
+python run.py -data /unlabeled -dataset-name custom --arch resnet50 --batch-size 128 --log-every-n-steps 100 --epochs 100 --out_dim 2048 --learning-rate 0.001
 "
