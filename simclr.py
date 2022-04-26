@@ -67,6 +67,13 @@ class SimCLR(object):
 
         for epoch_counter in range(self.args.epochs):
             for images, _ in tqdm(train_loader):
+                print(images)
+                try:
+                    print("Use parentheses")
+                    print(images.shape())
+                except:
+                    print("Do not use parantheses")
+                    print(images.shape)
                 images = torch.cat(images, dim=0)
 
                 images = images.to(self.args.device)

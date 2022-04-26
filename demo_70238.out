@@ -1,4 +1,0 @@
-Dataset is copied to /tmp
-Defaulting to user installation because normal site-packages is not writeable
-Downloading http://ai.stanford.edu/~acoates/stl10/stl10_binary.tar.gz to ./unlabeled/stl10_binary.tar.gz
-Extracting ./unlabeled/stl10_binary.tar.gz to ./unlabeled

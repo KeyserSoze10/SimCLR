@@ -4,7 +4,7 @@ import shutil
 import torch
 import yaml
 from PIL import Image
-
+import numpy as np
 
 
 def save_checkpoint(state, is_best, filename='checkpoint.pth.tar'):
@@ -42,6 +42,7 @@ class CustomDataSet(torch.utils.data.Dataset):
         self.transform = transform
         all_imgs = os.listdir(main_dir)
         self.total_imgs = all_imgs#natsort.natsorted(all_imgs)
+        self.targets = np.asarray([-1]*len(self.total_imgs))
 
     def __len__(self):
         return len(self.total_imgs)
@@ -50,4 +51,5 @@ class CustomDataSet(torch.utils.data.Dataset):
         img_loc = os.path.join(self.main_dir, self.total_imgs[idx])
         image = Image.open(img_loc).convert("RGB")
         tensor_image = self.transform(image)
-        return tensor_image
+        target = self.targets[idx]
+        return tensor_image, target
