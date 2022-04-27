@@ -73,6 +73,12 @@ def main():
         num_workers=args.workers, pin_memory=True, drop_last=True)
 
     model = ResNetSimCLR(base_model=args.arch, out_dim=args.out_dim)
+    try:
+        PATH = "/scratch/ask9126/DL_Project22/SimCLR/checkpoint_0100.pth.tar"
+        model.load_state_dict(torch.load(PATH)['state_dict'], strict=False)
+        print("Using trained model")
+    except:
+        print("Didn't find model")
 
     optimizer = torch.optim.Adam(model.parameters(), args.lr, weight_decay=args.weight_decay)
 

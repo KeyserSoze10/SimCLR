@@ -57,6 +57,7 @@ class SimCLR(object):
     def train(self, train_loader):
 
         scaler = GradScaler(enabled=self.args.fp16_precision)
+        PATH = "/scratch/ask9126/DL_Project22/SimCLR"
 
         # save config file
         save_config_file(self.writer.log_dir, self.args)
@@ -64,7 +65,9 @@ class SimCLR(object):
         n_iter = 0
         logging.info(f"Start SimCLR training for {self.args.epochs} epochs.")
         logging.info(f"Training with gpu: {self.args.disable_cuda}.")
-
+        progress_file = open('unlabeled_progress.txt', 'a')
+        progress_file.write("new unlabeled simclr run")
+        progress_file.flush()
         for epoch_counter in range(self.args.epochs):
             for images, _ in tqdm(train_loader):
                 #print(images)
@@ -104,6 +107,9 @@ class SimCLR(object):
                 self.scheduler.step()
             logging.debug(f"Epoch: {epoch_counter}\tLoss: {loss}\tTop1 accuracy: {top1[0]}")
 
+            progress_file.write("Epoch:{}".format(epoch_counter))
+            progress_file.flush()
+
             # save model checkpoints
             checkpoint_name = 'checkpoint_{:04d}.pth.tar'.format(self.args.epochs)
             save_checkpoint({
@@ -111,16 +117,16 @@ class SimCLR(object):
                 'arch': self.args.arch,
                 'state_dict': self.model.state_dict(),
                 'optimizer': self.optimizer.state_dict(),
-            }, is_best=False, filename=os.path.join(self.writer.log_dir, checkpoint_name))
-            logging.info(f"Model checkpoint and metadata has been saved at {self.writer.log_dir}.")
+            }, is_best=False, filename=os.path.join(PATH, checkpoint_name))
+            logging.info(f"Model checkpoint and metadata has been saved at {PATH}.")
 
             checkpoint_name = 'backbone_{:04d}.pth.tar'.format(self.args.epochs)
             save_checkpoint({
                 'epoch': self.args.epochs,
                 'arch': self.args.arch,
                 'state_dict': self.model.backbone.state_dict()
-            }, is_best=False, filename=os.path.join(self.writer.log_dir, checkpoint_name))
-            logging.info(f"Model checkpoint and metadata has been saved at {self.writer.log_dir}.")
+            }, is_best=False, filename=os.path.join(PATH, checkpoint_name))
+            logging.info(f"Model checkpoint and metadata has been saved at {PATH}.")
 
         logging.info("Training has finished.")
         # save model checkpoints
@@ -130,5 +136,14 @@ class SimCLR(object):
             'arch': self.args.arch,
             'state_dict': self.model.state_dict(),
             'optimizer': self.optimizer.state_dict(),
-        }, is_best=False, filename=os.path.join(self.writer.log_dir, checkpoint_name))
-        logging.info(f"Model checkpoint and metadata has been saved at {self.writer.log_dir}.")
+        }, is_best=False, filename=os.path.join(PATH, checkpoint_name))
+        logging.info(f"Model checkpoint and metadata has been saved at {PATH}.")
+
+        checkpoint_name = 'backbone_{:04d}.pth.tar'.format(self.args.epochs)
+            save_checkpoint({
+                'epoch': self.args.epochs,
+                'arch': self.args.arch,
+                'state_dict': self.model.backbone.state_dict()
+            }, is_best=False, filename=os.path.join(PATH, checkpoint_name))
+            logging.info(f"Model checkpoint and metadata has been saved at {PATH}.")
+        progress_file.close()
